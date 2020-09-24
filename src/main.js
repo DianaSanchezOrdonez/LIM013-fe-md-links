@@ -1,4 +1,55 @@
 const fs = require('fs');
+const http = require('http');
+
+/*---fs.stat---*/
+const dirfile = 'text.txt';
+const flagfile = 'flags.txt';
+
+fs.stat(dirfile, (err, stats) => {
+  if(err){
+    throw(err)
+  }else{
+    console.dir(stats, {colors:true});
+  }
+})
+const MarkdownIt = require('markdown-it');
+/*---MarkdownIt---*/
+md = new MarkdownIt();
+let result = md.render('# markdown-it rulezz!');
+console.log('result' , result);
+/*---HTTP---*/
+const options = {
+  hostname: '127.0.0.1',
+  port: 5500,
+  path: '/data.json',
+  method: 'GET'
+}
+
+const req = http.request(options, res => {
+  console.log(`status code: ${res.statusCode}`);
+  console.log(`headers: %j`, res.headers);
+
+  let body = '';
+  res.on('data', chunk => {
+    body += chunk;
+  })
+  res.on('end', () => {
+    console.log('\n\nResultados');
+    console.log(body);
+  })
+})
+req.on('error', err => {});
+req.end();
+
+/*---creando servidor---*/
+http.createServer((req, res) => {
+  res.writeHead(200, {
+    'Content-type': 'text/plain'
+  });
+  res.end('Hola Mundo')
+}).listen(3000);
+
+console.log('Servidor iniciado: ');
 
 const archivo = 'text.txt'
 
