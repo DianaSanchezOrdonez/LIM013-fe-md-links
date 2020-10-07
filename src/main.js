@@ -1,117 +1,39 @@
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const archivo = 'text.txt'
+const __dirname = path.resolve();
 
-/*---validar si existe sincrono---*/
-if (fs.existsSync(archivo)) {
-  console.log('el archivo existe');
-} else {
-  console.log('el archivo no existe');
+export const isExistPath = (route) => fs.existsSync(route)
+
+export const isAbsolutePath = (route) => path.isAbsolute(route)
+
+export const convertToAbsolute = (route) => path.join(__dirname, route)
+
+export const isFilePath = (route) => {
+  const stat = fs.lstatSync(route);
+  const result = stat.isFile();
+  return result;
 }
 
-/*---validar si existe asincrono---*/
-fs.access(archivo, fs.constants.F_OK, (err) => {
-  if (err) {
-    console.log('El archivo no existe');
+export const isDirectoryPath = (route) => {
+  let arrayFiles = []
+  if (isFilePath(route)) {
+    arrayFiles.push(route)
   } else {
-    console.log('El archivo existe');
+    const readDirectory = fs.readdirSync(route)
+    readDirectory.forEach(file => {
+      const pathFile = path.join(route, file);
+      arrayFiles.push(pathFile)
+    })
   }
-})
-
-/*---escribir en un archivo sincrono---*/
-const contenido = 'Manejando modulos de node.js';
-fs.writeFileSync(archivo, contenido);
-console.log('se ha escrito en el archivo');
-
-/*---escribir en un archivo asincrono---*/
-fs.writeFile(archivo, contenido, (err) => {
-  if (err) {
-    throw ('Hubo un error')
-  } else {
-    console.log('Se a escrito en el archivo');
-  }
-})
-
-const textoAdicional = '\nAqui va otra linea de codigo';
-fs.appendFile(archivo, textoAdicional, (err) => {
-  if (err) {
-    throw ('No se adjunto más texto', err)
-  } else {
-    'se agrego más texto'
-  }
-})
-
-fs.stat('README.md', function (err) {
-  if (!err) {
-    console.log('el directorio existe');
-  } else if (err.code === 'ENOENT') {
-    console.log('el directorio no existe');
-  }
-})
-
-/*---PROCESS WRITE Y ON ---*/
-let nombre;
-let preguntas = ['¿Cuál es tu nombre? ', '¿Cuál es tu edad?', '¿Lenguaje de programación favorito?'];
-let respuestas = [];
-
-function pregunta(i) {
-  process.stdout.write(preguntas[i]);
+  //console.log(arrayFiles);
+  return arrayFiles
 }
 
-process.stdin.on('data', function (data) {
-  respuestas.push(data.toString().trim());
-
-  if (respuestas.length < preguntas.length) {
-    pregunta(respuestas.length)
-  } else {
-    process.exit();
-  }
-})
-
-pregunta(0);
-
-process.stdin.on('data', function (data) {
-  nombre = data.toString().trim();
-  process.stdout.write(`Hola ${nombre}!`);
-  process.exit();
-})
-
-/*---crear directorio---*/
-fs.mkdirSync('img');
-/*--- crear directorio asincrono---*/
-fs.mkdir('css', function (error) {
-  if (error) {
-    throw ('Error: ' + error)
-  }
-})
-/*--- validar si existe sincrono---*/
-if (fs.existsSync('css')) {
-  console.log('la carpeta ya existe');
-} else {
-  fs.mkdir('css', function (error) {
-    if (error) {
-      throw (error)
-    }
-    console.log('la carpeta ha sido creada');
-  });
-
-}
-
-/*--- leer archivo sincrono---*/
-let files = fs.readdirSync('./src')
-
-fs.readdir('./src', (error, files) => {
-  if (error) {
-    throw (error);
-  }
-  console.log(files);
-
-  //let archivo = fs.readFileSync('./src/texto.txt', 'utf-8')
-  fs.readFile('./src/texto.txt', 'utf-8', (error, file) => {
-    if (error) {
-      throw error
-    }
-    console.log(file);
+//let arrayPath = isDirectoryPath('C:/DIANA/laboratoria/LIM013-fe-md-links')
+export const isMdExtension = (arrayPath) => {
+  return arrayPath.filter((file) => {
+    return path.extname(file) === '.md';
   })
-  console.log('Leyendo archivo...');
-})
+}
+//console.log(isMdExtension(arrayPath));
