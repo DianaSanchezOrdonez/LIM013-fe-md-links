@@ -24,7 +24,7 @@
   ],
   "author": "Diana Sanchez Ordoñez",
   "bin": {
-    "md-links": "src/index.js"
+    "md-links": "src/cli.js"
   },
   "license": "MIT",
   "bugs": {

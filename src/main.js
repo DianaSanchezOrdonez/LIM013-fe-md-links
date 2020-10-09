@@ -5,6 +5,8 @@ const __dirname = path.resolve();
 
 export const isExistPath = (route) => fs.existsSync(route)
 
+isExistPath()
+
 export const isAbsolutePath = (route) => path.isAbsolute(route)
 
 export const convertToAbsolute = (route) => path.join(__dirname, route)
