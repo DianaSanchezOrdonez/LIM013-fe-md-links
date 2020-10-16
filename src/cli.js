@@ -1,56 +1,53 @@
 #!/usr/bin/env node
 
 import process from 'process';
-import {
-    mdLinks
-} from './index.js';
-/* import fetch from 'node-fetch';
-import {
-    resolve
-} from 'path';
-import {
-    rejects
-} from 'assert'; */
+eesimport { mdLinks, mdLinksValidate, mdLinksStats} from './index.js';
 
+const messageStart = () => {
+    const commands = [{option:'', structure: 'md-links <path-to-file>', example: './some/example.md', outpout:'[{ href, text, file }]'},
+                  {option:'--validate', structure: 'md-links <path-to-file> [options]', example: './some/example.md --validate', outpout:'[{ href, text, file, status, message }]'},
+                  {option:'--stats', structure: 'md-links <path-to-file> [options]', example: './some/example.md --stats', outpout:'[{ total, unique }]'},
+                  {option:'--stats --validate', structure: 'md-links <path-to-file> [options]', example: './some/example.md --stats --validate', outpout:'[{ total, unique, broken }]'},
+                  {option:'--help', structure: '', example: 'md-links <path-to-file> [options]', outpout:'Volver a mostrar las opciones'}]
+    
+    console.table(
+        commands.map(command => {
+            return{
+            'Opciones' : command.option,
+            'Ejemplo' : command.example,
+            'Outpout' : command.outpout
+            }
+        })
+    );
+}
 /*-------Grab provided args-------*/
 const args = process.argv[2];
 let opt = process.argv[3];
-console.log('args', args);
-console.log('opt',opt);
-/* let comandos = { validate: false, stats:false}; */
-
-//console.log('a ver',args);
-//console.log('pego',opt);
-//let opt = '--validate';
-//mdLinks(args,opt);
-
+let opt2 = `${process.argv[3]} ${process.argv[4]}`
+//console.log('opt2', opt2);
 if (opt === undefined) {
-    //console.log('opt',opt);
-    mdLinks(args, {validate: undefined})
-    //console.log('mdLinks',mdLinks(args, {validate:true}));
-}else if (process.argv[3] === '--validate') {
-    //console.log('opt',opt);
-    mdLinks(args, {validate: true})
-    //console.log('mdLinks',mdLinks(args, {validate:true}));
-}else if (process.argv[3] === '--stats') {
-    //console.log('opt',opt);
-    mdLinks(args, {validate: false})
-    
-    //console.log('mdLinks',mdLinks(args, {validate:true}));
-}else{
-    console.log('help');
+    mdLinks(args).then(result => {
+        result.map(element => {
+            console.log(` File => ${element.file} Url => ${element.href} Texto => ${element.text}`);
+        }) 
+    });
+}
+else if (opt === '--validate') {
+    mdLinksValidate(args)
+}
+else if (opt === '--stats') {
+    console.log('opt',opt);
+    mdLinksStats(args);
+}
+else if (opt2 === '--stats --validate') {
+    console.log('opt',opt);
+    mdLinksStats(args);
+}
+else if (opt === '--help'){
+    messageStart();
 }
 
-/* fetch('https://es.wikipedia.org/wiki/Markdown')
-    .then(response => response.status)
-    .then(data => console.log('estado',data)); */
-
-/* fetch('https://es.wikipedia.org/wiki/Markdown').then((res)=>{
-    console.log('url',res.url);
-    console.log('status',res.status);
-    console.log('text',res.statusText);
-})
-
+/*
 fetch('https://api.github.com/users/octocat').then((res)=>{
     return res.json();
 }).then((json) => {
@@ -68,24 +65,4 @@ fetch('https://api.github.com/users/octocat').then((res)=>{
         },2000);
     })
 }
-
-calcular(2,3).then((resultado) => {
-    console.log(resultado);
-},(error) => {
-    console.log(error);
-}) */
-
-/* let promesa = new Promise((resolve,reject) => {
-    //resolve('Sucess!!')
-    reject('Error')
-})
-
-promesa.then((resultado) => {
-    console.log(resultado);
-}, (error) => {
-    console.log(error);
-}); */
-
-/* const stats = () => {
-
-} */
+*/

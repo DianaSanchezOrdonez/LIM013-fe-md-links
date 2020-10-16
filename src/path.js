@@ -10,7 +10,7 @@ export const isExistPath = (route) => fs.existsSync(route)
 export const isAbsolutePath = (route) => path.isAbsolute(route)
 
 export const convertToAbsolute = (route) => path.join(__dirname, route)
-console.log('convertToAbsolute', convertToAbsolute('C:/DIANA/laboratoria/LIM013-fe-md-links'));
+//console.log('convertToAbsolute', convertToAbsolute('C:/DIANA/laboratoria/LIM013-fe-md-links'));
 
 export const isFilePath = (route) => {
   const stat = fs.lstatSync(route);

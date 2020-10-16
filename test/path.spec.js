@@ -63,6 +63,7 @@ describe('loopArrayDirectory()', () => {
   it('Files in directory', () => {
     const arrayFiles = ['C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\.eslintrc',
       'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\md-links.spec.js',
+      'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\path.spec.js',
       'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md',
       'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md'
     ]
