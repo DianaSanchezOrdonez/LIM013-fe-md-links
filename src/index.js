@@ -48,52 +48,77 @@ const getLinks = (route) => {
 }
 
 /*---------------------------Third Step------------------------------------*/
-export const mdLinks = (pathFile) => new Promise((resolve, reject) => {
+export const mdLinks = (pathFile,option) => new Promise((resolve, reject) => {
   //console.log('a ver si llego',pathFile);
   //pathFile = data.toString().trim();
   let result = getLinks(pathFile);
-  result = result.toString();
+  //console.log('result', result);
+  const links = extraerLinks(result);
+  //console.log('links', links);
+  if(option.validate === false){
+    resolve(links)
+  }else{
+    //mdLinksValidate(links.href)
+    mdLinksValidate(links).then((resultValidate) => {
+      resolve(resultValidate)
+    })
+  }
+  //result = result.toString();
   //console.log('result', result);
   //console.log('option', option.validate);
-  const readMd = fs.readFileSync(result, 'utf-8')
-  const linksMatch = readMd.match(expToLinks)
-  const arrayLinksMd = []
-  for (let i in linksMatch) {
-    let urlMatch = linksMatch[i].match(expToUrl)[0];
-    const textMatch = linksMatch[i].match(textToUrl)[0];
-    urlMatch = urlMatch.slice(1, urlMatch.length - 1);
-    arrayLinksMd.push({
-      href: urlMatch,
-      text: textMatch.slice(1, textMatch.length - 1),
-      file: pathFile,
-    })
-    resolve(arrayLinksMd)  
-  }
+  
 })
 
-export const mdLinksValidate = (pathFile) => {
-  mdLinks(pathFile).then((arrayLinksMd) => {
-    return arrayLinksMd.forEach(element => {
-      let newArray = [];
-      return fetch(element.href).then((res) => {
-        newArray.push({
-          href: element.href,
-          text: element.text,
-          file: element.file,
-          status: res.status,
-          textStatus: res.statusText,
-        })
-        
-        console.log(`File => ${newArray[0].file}, Url => ${newArray[0].href}, Status => ${newArray[0].textStatus} ${newArray[0].status}, Texto => ${newArray[0].text}`);
-      }, (error) => {
-        console.log(error)
+const extraerLinks = (filesMd) => {
+  const arrayLinksMd = [];
+  filesMd.forEach((file) => {
+    const readFileMd = fs.readFileSync(file,'utf-8');
+    const linksMatch = readFileMd.match(expToLinks)
+
+    for (let i in linksMatch) {
+      let textMatch = linksMatch[i].match(textToUrl)[0];
+      let urlMatch = linksMatch[i].match(expToUrl)[0];
+      //const textMatch = linksMatch[i];
+      urlMatch = urlMatch.slice(1, urlMatch.length - 1);
+      //text = textMatch.slice(1, textMatch.length - 1),
+      arrayLinksMd.push({
+        href: urlMatch,
+        text: textMatch.slice(1, textMatch.length - 1),
+        file: filesMd.toString(),
       })
-    });
+    }
   })
+  return arrayLinksMd;
 }
 
+//console.log('mdLinks',mdLinks('prueba.md',{validate:false}));
+
+export const mdLinksValidate = (arrayLinks) => {
+  //console.log('arrayLinks',arrayLinks);
+  const linksValidate = arrayLinks.map(element => {
+    //console.log('element', element);
+    return fetch(element.href).then((res) => {
+      let objLinks = {
+        href: element.href,
+        file: element.file,
+        text: element.text,
+        status: res.status,
+        textStatus: res.statusText,
+      }
+      
+      return objLinks
+      //console.log(`File => ${newArray[0].file}, Url => ${newArray[0].href}, Status => ${newArray[0].textStatus} ${newArray[0].status}, Texto => ${newArray[0].text}`);
+    }) 
+  })
+  //console.log('linksValidate',linksValidate);
+  return Promise.all(linksValidate)
+}
+
+//const arrayPrueba = ['https://nodejs.org/api/path.html', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e']
+//mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
+
 export const mdLinksStats = (pathFile) => {
-  mdLinks(pathFile).then((arrayLinksMd) => {
+  mdLinksValidate(pathFile).then((arrayLinksMd) => {
     let newArray = arrayLinksMd.map(element => element.href)
     const uniqueLinks = [...new Set(newArray)];
     return console.log(`Total => ${arrayLinksMd.length} \nUnique => ${uniqueLinks.length}`);
@@ -134,7 +159,7 @@ export const mdLinksStatsValidate = (pathFile) => {
 //mdLinksValidate('prueba.md')
 
 //mdLinks2('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
-//getLinks('text.txt')
+//console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'));
 //fetchLinks('C:/DIANA/laboratoria/LIM013-fe-md-links')
 //isDirectoryPath('C:/DIANA/laboratoria/LIM013-fe-md-links')
 //isDirectoryPath('text.txt')
