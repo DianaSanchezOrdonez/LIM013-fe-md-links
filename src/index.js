@@ -4,27 +4,30 @@ import fetch from 'node-fetch';
 import chalk from 'chalk';
 import { isExistPath, isAbsolutePath, convertToAbsolute, loopArrayDirectory, isMdExtension } from './path.js' 
 
+
 const expToLinks = /\[((.+?))\]\((http|https|ftp|ftps).+?\)/g;
 const expToUrl = /\((http|https|ftp|ftps).+?\)/g;
 const textToUrl = /\[((.+?))\]/g;  
 
 /*---------------------------Second Step------------------------------------*/
 const messageNoExist = (route) => {
-  console.log(chalk.bold.bgRed(`La ruta ${route} no existe`))
+  console.log(chalk.bold.bgRed(`La ruta ${route} no existe`));
+  //process.exit();
 }
 const messageNoMd = (route) => {
-  console.log(chalk.bold.bgRed(`La ruta ${route} no tiene archivos .md`))
+  console.log(chalk.bold.bgRed(`La ruta ${route} no tiene archivos .md`));
+  //process.exit();
 }
 
 const getLinks = (route) => {
-  //console.log('route', route);
+  console.log('route', route);
   if (isExistPath(route)) {
-    //console.log('isExistPath(route)', isExistPath(route));
+    console.log('isExistPath(route)', isExistPath(route));
     if (isAbsolutePath(route)) {
       const arrayPath = loopArrayDirectory(route);
       let result = isMdExtension(arrayPath)
       if (result.length > 0) {
-        //console.log('result1', result);
+        console.log('result1', result);
         return result
       } else {
         messageNoMd(route)
@@ -35,7 +38,7 @@ const getLinks = (route) => {
       let result = isMdExtension(arrayPath)
       //console.log('result', result.length);
       if (result.length > 0) {
-        //console.log('result2', result);
+        console.log('result2', result);
         return result
       } else {
         messageNoMd(route)
@@ -107,7 +110,7 @@ export const mdLinksValidate = (arrayLinks) => {
   return Promise.all(linksValidate)
 }
 
-//mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/test', {validate:true}).then(result => console.log(result))
+mdLinks('/test/test.md', {validate:true}).then(result => console.log(result))
 
 //const arrayPrueba = ['https://nodejs.org/api/path.html', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e']
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
