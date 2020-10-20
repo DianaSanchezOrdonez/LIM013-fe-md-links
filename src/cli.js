@@ -46,60 +46,43 @@ const messageStart = () => {
   );
 }
 
-/*---------------------------Stats and Mix------------------------------------*/
-const mdLinksStats = (pathFile) => {
-  mdLinksValidate(pathFile).then((arrayLinksMd) => {
-    let newArray = arrayLinksMd.map(element => element.href)
-    const uniqueLinks = [...new Set(newArray)];
-    return console.log(`Total => ${arrayLinksMd.length} \nUnique => ${uniqueLinks.length}`);
-  }, (error) => {
-    console.log(error);
-  })
-}
-
-/*-------Grab provided args-------*/
+/*---------------------------Input commands lines------------------------*/
 const args = process.argv[2];
-let opt = process.argv[3];
-//console.log('opt', opt);
-let opt2 = `${process.argv[3]} ${process.argv[4]}`
-//console.log('opt2', opt2);
+let opt;
 
+/*--------------------Assigment input option in command line-------------*/
+if (process.argv[3] && process.argv[4]){
+  opt = `${process.argv[3]} ${process.argv[4]}`
+}
+else{
+  opt = process.argv[3]
+}
+//console.log('opt', opt);
+/*---------------------------Options------------------------------------*/
 if (opt === undefined) {
-    mdLinks(args, {validate: false}).then(result => console.log(result))
+  mdLinks(args, { validate: false }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Text => ${element.text}`)))
 } 
 else if (opt === '--validate') {
-    mdLinks(args, {validate: true}).then(result => console.log(result))
+  mdLinks(args, { validate: true }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Status => ${element.textStatus} ${element.status}, Texto => ${element.text}`)))
 } 
 else if (opt === '--stats') {
-    mdLinks(args, {validate: true}).then((result) => {
-        let newArray = result.map(element => element.href)
-        const uniqueLinks = [...new Set(newArray)];
-        return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks.length}`);
-    }) 
+  mdLinks(args, { validate: true }).then((result) => {
+    let newArray = result.map(element => element.href)
+    const uniqueLinks = [...new Set(newArray)];
+    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks.length}`);
+  })
+} 
+else if (opt === '--stats --validate') {
+  mdLinks(args, { validate: true }).then((result) => {
+    let newArray = result.map(element => element.href)
+    const uniqueLinks = [...new Set(newArray)];
+    let brokenArray = result.filter(element => element.status >= 400)
+    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks.length} \nBroken => ${brokenArray.length}`);
+  })
 } 
 else if (opt === '--help') {
   messageStart();
 }
-else {
-
+else{
+  console.log('opcion inválida');
 }
-
-/*
-fetch('https://api.github.com/users/octocat').then((res)=>{
-    return res.json();
-}).then((json) => {
-    console.log('json',json);
-}) */
-/* let calcular = (num1,num2) => {
-    return new Promise((resolve,reject) => {
-        setTimeout(() => {
-            let suma = num1 + num2;
-            if(suma > 5){
-                resolve(num1+num2);
-            }else{
-                reject('Error los datos')
-            }
-        },2000);
-    })
-}
-*/

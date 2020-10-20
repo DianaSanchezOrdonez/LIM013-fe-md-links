@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs';
 import fetch from 'node-fetch'; 
 
@@ -48,7 +47,7 @@ const getLinks = (route) => {
 }
 
 /*---------------------------Third Step------------------------------------*/
-export const mdLinks = (pathFile,option) => new Promise((resolve, reject) => {
+export const mdLinks = (pathFile,option) => new Promise((resolve) => {
   //console.log('a ver si llego',pathFile);
   //pathFile = data.toString().trim();
   let result = getLinks(pathFile);
@@ -63,10 +62,6 @@ export const mdLinks = (pathFile,option) => new Promise((resolve, reject) => {
       resolve(resultValidate)
     })
   }
-  //result = result.toString();
-  //console.log('result', result);
-  //console.log('option', option.validate);
-  
 })
 
 const extraerLinks = (filesMd) => {
@@ -91,12 +86,10 @@ const extraerLinks = (filesMd) => {
   return arrayLinksMd;
 }
 
-//console.log('mdLinks',mdLinks('prueba.md',{validate:false}));
-
 export const mdLinksValidate = (arrayLinks) => {
-  //console.log('arrayLinks',arrayLinks);
+  
   const linksValidate = arrayLinks.map(element => {
-    //console.log('element', element);
+    
     return fetch(element.href).then((res) => {
       let objLinks = {
         href: element.href,
@@ -114,59 +107,10 @@ export const mdLinksValidate = (arrayLinks) => {
   return Promise.all(linksValidate)
 }
 
+//mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/test', {validate:true}).then(result => console.log(result))
+
 //const arrayPrueba = ['https://nodejs.org/api/path.html', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e']
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
-
-export const mdLinksStats = (pathFile) => {
-  mdLinksValidate(pathFile).then((arrayLinksMd) => {
-    let newArray = arrayLinksMd.map(element => element.href)
-    const uniqueLinks = [...new Set(newArray)];
-    return console.log(`Total => ${arrayLinksMd.length} \nUnique => ${uniqueLinks.length}`);
-  }, (error) => {
-    console.log(error);
-  })
-}
-
-export const mdLinksStatsValidate = (pathFile) => {
-  mdLinks(pathFile).then((arrayLinksMd) => {
-    let newArray = arrayLinksMd.map(element => element.href)
-    const uniqueLinks = [...new Set(newArray)];
-    const brokenLinks = [];
-    let index = 0;
-    const imprimirResult = () => {
-      console.log(`Total => ${arrayLinksMd.length} \nUnique => ${uniqueLinks.length} \nBroken => ${brokenLinks.length}`);
-    }
-    arrayLinksMd.map((element) => {
-
-      fetch(element.href).then((res) => {
-        index++;
-        if (res.status >= 400) {
-          brokenLinks.push(element)
-        }
-        if (arrayLinksMd.length == index) {
-          imprimirResult();
-        }
-      }, (error) => {
-        console.log(error);
-      })
-    })
-  }, (error) => {
-    console.log(error);
-  })
-}
-
-//mdLinksStatsValidate('prueba.md')
-//mdLinksValidate('prueba.md')
-
-//mdLinks2('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
+//mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
 //console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'));
-//fetchLinks('C:/DIANA/laboratoria/LIM013-fe-md-links')
-//isDirectoryPath('C:/DIANA/laboratoria/LIM013-fe-md-links')
-//isDirectoryPath('text.txt')
-//isDirectoryPath('C:/DIANA/laboratoria/LIM013-fe-md-links')
 
-/* let pathFile;
-const __dirname = path.resolve();
-const __filename = fileURLToPath(
-  import.meta.url);
-*/
