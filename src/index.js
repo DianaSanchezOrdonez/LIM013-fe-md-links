@@ -20,14 +20,14 @@ const messageNoMd = (route) => {
 }
 
 const getLinks = (route) => {
-  console.log('route', route);
+  //console.log('route', route);
   if (isExistPath(route)) {
-    console.log('isExistPath(route)', isExistPath(route));
+    //console.log('isExistPath(route)', isExistPath(route));
     if (isAbsolutePath(route)) {
       const arrayPath = loopArrayDirectory(route);
       let result = isMdExtension(arrayPath)
       if (result.length > 0) {
-        console.log('result1', result);
+        //console.log('result1', result);
         return result
       } else {
         messageNoMd(route)
@@ -38,7 +38,7 @@ const getLinks = (route) => {
       let result = isMdExtension(arrayPath)
       //console.log('result', result.length);
       if (result.length > 0) {
-        console.log('result2', result);
+        //console.log('result2', result);
         return result
       } else {
         messageNoMd(route)
@@ -76,9 +76,7 @@ const extraerLinks = (filesMd) => {
     for (let i in linksMatch) {
       let textMatch = linksMatch[i].match(textToUrl)[0];
       let urlMatch = linksMatch[i].match(expToUrl)[0];
-      //const textMatch = linksMatch[i];
       urlMatch = urlMatch.slice(1, urlMatch.length - 1);
-      //text = textMatch.slice(1, textMatch.length - 1),
       arrayLinksMd.push({
         href: urlMatch,
         text: textMatch.slice(1, textMatch.length - 1),
@@ -101,18 +99,31 @@ export const mdLinksValidate = (arrayLinks) => {
         status: res.status,
         textStatus: res.statusText,
       }
-      
       return objLinks
-      //console.log(`File => ${newArray[0].file}, Url => ${newArray[0].href}, Status => ${newArray[0].textStatus} ${newArray[0].status}, Texto => ${newArray[0].text}`);
     }) 
   })
   //console.log('linksValidate',linksValidate);
   return Promise.all(linksValidate)
 }
 
-mdLinks('/test/test.md', {validate:true}).then(result => console.log(result))
+export const uniqueLinks = (arrayObject) => {
+  let newArray = arrayObject.map(element => element.href)
+  const uniqueArray = [...new Set(newArray)];
+  //console.log('uniqueArray', uniqueArray);
+  return uniqueArray.length
+}
 
-//const arrayPrueba = ['https://nodejs.org/api/path.html', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e']
+export const brokenLinks = (arrayObject) => {
+  let brokenArray = arrayObject.filter(element => element.status >= 400)
+  return brokenArray.length
+}
+
+/*---------------------------Testing------------------------------------*/
+
+//mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links', {validate:true}).then(result => console.log(result))
+
+//const arrayPrueba = [{href:'https://nodejs.org/api/path.html'}, {href:'https://nodejs.org/api/path.html'},{href:'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e'}]
+//console.log('uniqueLinks', uniqueLinks(arrayPrueba));
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
 //mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
 //console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'));

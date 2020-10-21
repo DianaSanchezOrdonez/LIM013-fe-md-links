@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import process from 'process';
-import { mdLinks} from './index.js';
+import { mdLinks, uniqueLinks, brokenLinks} from './index.js';
 
 const messageStart = () => {
   const commands = [{
@@ -67,17 +67,12 @@ else if (opt === '--validate') {
 } 
 else if (opt === '--stats') {
   mdLinks(args, { validate: true }).then((result) => {
-    let newArray = result.map(element => element.href)
-    const uniqueLinks = [...new Set(newArray)];
-    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks.length}`);
+    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks(result)}`);
   })
 } 
 else if (opt === '--stats --validate') {
   mdLinks(args, { validate: true }).then((result) => {
-    let newArray = result.map(element => element.href)
-    const uniqueLinks = [...new Set(newArray)];
-    let brokenArray = result.filter(element => element.status >= 400)
-    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks.length} \nBroken => ${brokenArray.length}`);
+    return console.log(`Total => ${result.length} \nUnique => ${uniqueLinks(result)} \nBroken => ${brokenLinks(result)}`);
   })
 } 
 else if (opt === '--help') {
