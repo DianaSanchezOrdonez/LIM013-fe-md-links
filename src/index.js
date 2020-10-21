@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import process from 'process';
 import { isExistPath, isAbsolutePath, convertToAbsolute, loopArrayDirectory, isMdExtension } from './path.js' 
 
-
 const expToLinks = /\[((.+?))\]\((http|https|ftp|ftps).+?\)/g;
 const expToUrl = /\((http|https|ftp|ftps).+?\)/g;
 const textToUrl = /\[((.+?))\]/g;  
@@ -31,6 +30,7 @@ const getLinks = (route) => {
         return result
       } else {
         messageNoMd(route)
+        //return new Error('hubo un error')
       }
     } else {
       route = convertToAbsolute(route)
@@ -42,10 +42,12 @@ const getLinks = (route) => {
         return result
       } else {
         messageNoMd(route)
+        //return new Error('hubo un error')
       }
     }
   } else {
     messageNoExist(route);
+    //return new Error('hubo un error')
   }
 }
 
@@ -54,17 +56,18 @@ export const mdLinks = (pathFile,option) => new Promise((resolve) => {
   //console.log('a ver si llego',pathFile);
   //pathFile = data.toString().trim();
   let result = getLinks(pathFile);
+  
+    const links = extraerLinks(result);
+    //console.log('links', links);
+    if(option.validate === false){
+      resolve(links)
+    }else{
+      //mdLinksValidate(links.href)
+      mdLinksValidate(links).then((resultValidate) => {
+        resolve(resultValidate)
+      })
+    }
   //console.log('result', result);
-  const links = extraerLinks(result);
-  //console.log('links', links);
-  if(option.validate === false){
-    resolve(links)
-  }else{
-    //mdLinksValidate(links.href)
-    mdLinksValidate(links).then((resultValidate) => {
-      resolve(resultValidate)
-    })
-  }
 })
 
 const extraerLinks = (filesMd) => {
@@ -120,7 +123,7 @@ export const brokenLinks = (arrayObject) => {
 
 /*---------------------------Testing------------------------------------*/
 
-//mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links', {validate:true}).then(result => console.log(result))
+//mdLinks('text.md', {validate:true}).then(result => console.log(result))
 
 //const arrayPrueba = [{href:'https://nodejs.org/api/path.html'}, {href:'https://nodejs.org/api/path.html'},{href:'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e'}]
 //console.log('uniqueLinks', uniqueLinks(arrayPrueba));

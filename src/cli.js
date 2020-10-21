@@ -61,12 +61,21 @@ else{
 }
 //console.log('opt', opt);
 /*---------------------------Options------------------------------------*/
-
+//console.log(`|Links de: ${chalk.cyanBright(pathDoc)} |TOTAL  | ${chalk.yellowBright(arrayLinksMd.length)} `);
 if (opt === undefined) {
-  mdLinks(args, { validate: false }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Text => ${element.text}`)));
+  mdLinks(args, { validate: false }).then(result => result.forEach(element => console.log(`File => ${chalk.blue(element.file)}, Url => ${chalk.yellow(element.href)}, Text => ${chalk.cyan(element.text)}`)));
 } 
 else if (opt === '--validate') {
-  mdLinks(args, { validate: true }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Status => ${element.textStatus} ${element.status}, Texto => ${element.text}`)))
+  mdLinks(args, { validate: true }).then(result => result.forEach( function(element){
+    if(element.status >= 400){
+      console.log(`File => ${chalk.blue(element.file)}, Status => ${chalk.red(element.textStatus,element.status)}, Url => ${chalk.red(element.href)}, Text => ${chalk.cyan(element.text)}`);
+    }else{
+      console.log(`File => ${chalk.blue(element.file)}, Status => ${chalk.green(element.textStatus,element.status)}, Url => ${chalk.yellow(element.href)}, Text => ${chalk.cyan(element.text)}`);
+    }
+
+  }
+   
+  ))
 } 
 else if (opt === '--stats') {
   mdLinks(args, { validate: true }).then((result) => {
