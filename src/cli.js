@@ -1,5 +1,7 @@
-#!/usr/bin/env node
+#! /usr/bin/env node 
+
 import process from 'process';
+import chalk from 'chalk';
 import { mdLinks, uniqueLinks, brokenLinks} from './index.js';
 
 const messageStart = () => {
@@ -7,13 +9,13 @@ const messageStart = () => {
       option: '',
       structure: 'md-links <path-to-file>',
       example: './some/example.md',
-      outpout: '[{ href, text, file }]'
+      outpout: '[{ file, href, text }]'
     },
     {
       option: '--validate',
       structure: 'md-links <path-to-file> [options]',
       example: './some/example.md --validate',
-      outpout: '[{ href, text, file, status, message }]'
+      outpout: '[{ file, href, message, status, text }]'
     },
     {
       option: '--stats',
@@ -59,8 +61,9 @@ else{
 }
 //console.log('opt', opt);
 /*---------------------------Options------------------------------------*/
+
 if (opt === undefined) {
-  mdLinks(args, { validate: false }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Text => ${element.text}`)))
+  mdLinks(args, { validate: false }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Text => ${element.text}`)));
 } 
 else if (opt === '--validate') {
   mdLinks(args, { validate: true }).then(result => result.forEach(element => console.log(`File => ${element.file}, Url => ${element.href}, Status => ${element.textStatus} ${element.status}, Texto => ${element.text}`)))
@@ -79,5 +82,6 @@ else if (opt === '--help') {
   messageStart();
 }
 else{
-  console.log('opcion inválida');
+  console.log(chalk.bold.bgRed(`La opción ${opt} es inválida`));
+  messageStart();
 }

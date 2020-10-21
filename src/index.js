@@ -1,7 +1,7 @@
 import fs from 'fs';
 import fetch from 'node-fetch'; 
-
 import chalk from 'chalk';
+import process from 'process';
 import { isExistPath, isAbsolutePath, convertToAbsolute, loopArrayDirectory, isMdExtension } from './path.js' 
 
 
@@ -12,11 +12,11 @@ const textToUrl = /\[((.+?))\]/g;
 /*---------------------------Second Step------------------------------------*/
 const messageNoExist = (route) => {
   console.log(chalk.bold.bgRed(`La ruta ${route} no existe`));
-  //process.exit();
+  process.exit();
 }
 const messageNoMd = (route) => {
   console.log(chalk.bold.bgRed(`La ruta ${route} no tiene archivos .md`));
-  //process.exit();
+  process.exit();
 }
 
 const getLinks = (route) => {
