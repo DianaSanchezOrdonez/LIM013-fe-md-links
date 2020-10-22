@@ -4,12 +4,8 @@
 
 * [1. Preámbulo](#1-preámbulo)
 * [2. Resumen del proyecto](#2-resumen-del-proyecto)
-* [3. Objetivos de aprendizaje](#3-objetivos-de-aprendizaje)
-* [4. Consideraciones generales](#4-consideraciones-generales)
-* [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptación-mínimos-del-proyecto)
-* [6. Entregables](#6-entregables)
-* [7. Pistas, tips y lecturas complementarias](#7-pistas-tips-y-lecturas-complementarias)
-* [8. Checklist](#8-checklist)
+* [3. Descripción del proyecto](#3-descripción-del-proyecto)
+* [4. Desplegado en NPM](#4-desplegado-en-npm)
 
 ***
 
@@ -36,17 +32,39 @@ Este proyecto tiene la finalidad de verificar los links, que se encuentran en ar
 reportando estadísticas si son válidos, únicos o están rotos. Utilizando [Node.js](https://nodejs.org/) 
 el entorno de desarrollo de Javascript.
 
+## 3. Descripción del proyecto
+
 ### Diagrama de Flujo
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/diagramaFlujoMDLINKS.png)
 
+### Especificaciones técnicas
+
+Las herramientas y dependencias implementadas para la construción de esta librería fueron las siguientes:
+
+| Ejecución    | Descripción |
+| Node.js      | Entorno de desarrollo de Javascript|
+| ------       | ------ |
+| Dependencia  | Descripción |
+| ------       | ------ |
+| chalk        | Anida y encadena estilos|
+| node-fetch   | Permite utilizar el método fetch en Node.js |
+| eslint       | Herramienta para identificar sobre patrones encontrados en código ECMAScript / JavaScript |
+| babel-cli    | Convierte el código ECMAScript 2015+ en una versión compatible de JavaScript en navegadores o entornos actuales y antiguos. |
+| jest         | Framework de Javascript para pruebas |
+| Módulos      | Descripción |
+| fs           | Permite manejar los archivos del sistema |
+| path         | Proporciona trabajar con rutas de archivos y directorios.|
+| process      | Proporciona información y control sobre el proceso de Node.js actual |
+
+
 ### Instalación de la librería
 
 La librería se instala con el siguiente comando desde el terminal:
-  `npm install dianasanchezordonez-md-links`
+  `npm install dianaiso-md-links`
 
 Y de forma global con 
-  `npm install --global dianasanchezordonez-md-links`
+  `npm install --global dianaiso-md-links`
 
 ### Guía de Uso
 
@@ -81,3 +99,5 @@ necesiten de los resultados de la validación.
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/mix.png)
 
+## 4. Desplegado en NPM
+[dianaiso-md-links](https://www.npmjs.com/package/dianaiso-md-links)
