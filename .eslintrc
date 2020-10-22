@@ -2,15 +2,19 @@
   
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true
   },
+  "extends": ["eslint:recommended", "prettier"],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "extends": "eslint:recommended",
   "rules": {
     "no-console": "warn",
-    "import/extensions": 0
+    "import/extensions": 0,
+    "indent": ["error", 2],
+    "semi": ["error", "never"]
   }
 }

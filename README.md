@@ -36,15 +36,18 @@ el entorno de desarrollo de Javascript.
 
 ### Diagrama de Flujo
 
-![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/diagramaFlujoMDLINKS.png)
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/done.png)
+
+### Actividades cumplidas 
 
 ### Especificaciones técnicas
 
 Las herramientas y dependencias implementadas para la construción de esta librería fueron las siguientes:
 
 | Ejecución    | Descripción |
-| Node.js      | Entorno de desarrollo de Javascript|
 | ------       | ------ |
+| Node.js      | Entorno de desarrollo de Javascript|
+
 | Dependencia  | Descripción |
 | ------       | ------ |
 | chalk        | Anida y encadena estilos|
@@ -52,7 +55,9 @@ Las herramientas y dependencias implementadas para la construción de esta libre
 | eslint       | Herramienta para identificar sobre patrones encontrados en código ECMAScript / JavaScript |
 | babel-cli    | Convierte el código ECMAScript 2015+ en una versión compatible de JavaScript en navegadores o entornos actuales y antiguos. |
 | jest         | Framework de Javascript para pruebas |
+
 | Módulos      | Descripción |
+| ------       | ------ |
 | fs           | Permite manejar los archivos del sistema |
 | path         | Proporciona trabajar con rutas de archivos y directorios.|
 | process      | Proporciona información y control sobre el proceso de Node.js actual |

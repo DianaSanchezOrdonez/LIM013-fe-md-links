@@ -1,85 +1,40 @@
-import fs from 'fs';
-import fetch from 'node-fetch'; 
-import chalk from 'chalk';
-import process from 'process';
-import { isExistPath, isAbsolutePath, convertToAbsolute, loopArrayDirectory, isMdExtension } from './path.js' 
+import fs from 'fs'
+import fetch from 'node-fetch'
+import { isExistPath, isAbsolutePath, convertToAbsolute, loopArrayDirectory, isMdExtension } from './path.js'
 
-const expToLinks = /\[((.+?))\]\((http|https|ftp|ftps).+?\)/g;
-const expToUrl = /\((http|https|ftp|ftps).+?\)/g;
-const textToUrl = /\[((.+?))\]/g;  
+const expToLinks = /\[((.+?))\]\((http|https|ftp|ftps).+?\)/g
+const expToUrl = /\((http|https|ftp|ftps).+?\)/g
+const textToUrl = /\[((.+?))\]/g
 
 /*---------------------------Second Step------------------------------------*/
-const messageNoExist = (route) => {
-  console.log(chalk.bold.bgRed(`La ruta ${route} no existe`));
-  process.exit();
-}
-const messageNoMd = (route) => {
-  console.log(chalk.bold.bgRed(`La ruta ${route} no tiene archivos .md`));
-  process.exit();
-}
 
-const getLinks = (route) => {
-  //console.log('route', route);
+const getLinks = route => {
   if (isExistPath(route)) {
-    //console.log('isExistPath(route)', isExistPath(route));
     if (isAbsolutePath(route)) {
-      const arrayPath = loopArrayDirectory(route);
+      const arrayPath = loopArrayDirectory(route)
       let result = isMdExtension(arrayPath)
-      if (result.length > 0) {
-        //console.log('result1', result);
-        return result
-      } else {
-        messageNoMd(route)
-        //return new Error('hubo un error')
-      }
+      return result
     } else {
       route = convertToAbsolute(route)
-      const arrayPath = loopArrayDirectory(route);
+      const arrayPath = loopArrayDirectory(route)
       let result = isMdExtension(arrayPath)
-      //console.log('result', result.length);
-      if (result.length > 0) {
-        //console.log('result2', result);
-        return result
-      } else {
-        messageNoMd(route)
-        //return new Error('hubo un error')
-      }
+      return result
     }
   } else {
-    messageNoExist(route);
-    //return new Error('hubo un error')
+    throw new Error('No existe')
   }
 }
 
-/*---------------------------Third Step------------------------------------*/
-export const mdLinks = (pathFile,option) => new Promise((resolve) => {
-  //console.log('a ver si llego',pathFile);
-  //pathFile = data.toString().trim();
-  let result = getLinks(pathFile);
-  
-    const links = extraerLinks(result);
-    //console.log('links', links);
-    if(option.validate === false){
-      resolve(links)
-    }else{
-      //mdLinksValidate(links.href)
-      mdLinksValidate(links).then((resultValidate) => {
-        resolve(resultValidate)
-      })
-    }
-  //console.log('result', result);
-})
-
-const extraerLinks = (filesMd) => {
-  const arrayLinksMd = [];
-  filesMd.forEach((file) => {
-    const readFileMd = fs.readFileSync(file,'utf-8');
+const extraerLinks = filesMd => {
+  const arrayLinksMd = []
+  filesMd.forEach(file => {
+    const readFileMd = fs.readFileSync(file, 'utf-8')
     const linksMatch = readFileMd.match(expToLinks)
 
     for (let i in linksMatch) {
-      let textMatch = linksMatch[i].match(textToUrl)[0];
-      let urlMatch = linksMatch[i].match(expToUrl)[0];
-      urlMatch = urlMatch.slice(1, urlMatch.length - 1);
+      let textMatch = linksMatch[i].match(textToUrl)[0]
+      let urlMatch = linksMatch[i].match(expToUrl)[0]
+      urlMatch = urlMatch.slice(1, urlMatch.length - 1)
       arrayLinksMd.push({
         href: urlMatch,
         text: textMatch.slice(1, textMatch.length - 1),
@@ -87,47 +42,89 @@ const extraerLinks = (filesMd) => {
       })
     }
   })
-  return arrayLinksMd;
+  return arrayLinksMd
 }
 
-export const mdLinksValidate = (arrayLinks) => {
-  
+/*---------------------------Option: --validate------------------------------------*/
+export const mdLinksValidate = arrayLinks => {
   const linksValidate = arrayLinks.map(element => {
-    
-    return fetch(element.href).then((res) => {
-      let objLinks = {
-        href: element.href,
-        file: element.file,
-        text: element.text,
-        status: res.status,
-        textStatus: res.statusText,
-      }
-      return objLinks
-    }) 
+    return fetch(element.href)
+      .then(res => {
+        let objLinks = {
+          href: element.href,
+          file: element.file,
+          text: element.text,
+          status: res.status,
+        }
+        if (res.status >= 200 && res.status <= 399) objLinks.textStatus = 'Ok'
+        else objLinks.textStatus = 'Fail'
+        return objLinks
+      })
+      .catch(() => {
+        let objLinks = {
+          href: element.href,
+          file: element.file,
+          text: element.text,
+          status: 'Error',
+          textStatus: 'Fail',
+        }
+        return objLinks
+      })
   })
-  //console.log('linksValidate',linksValidate);
+
   return Promise.all(linksValidate)
 }
 
-export const uniqueLinks = (arrayObject) => {
+/*---------------------------Function Core------------------------------------*/
+export const mdLinks = (pathFile, option) =>
+  new Promise((resolve, reject) => {
+    let result
+    try {
+      result = getLinks(pathFile)
+    } catch (error) {
+      return reject(error)
+    }
+
+    if (result.length > 0) {
+      const links = extraerLinks(result)
+
+      if (option.validate === false) {
+        resolve(links)
+      } else {
+        mdLinksValidate(links).then(resultValidate => {
+          resolve(resultValidate)
+        })
+      }
+    } else {
+      resolve(result)
+    }
+
+    //console.log('result', result);
+  })
+
+//mdLinks('text.txt', {validate:true}).catch( error => console.error(error.message))
+
+/*---------------------------Option: --stats------------------------------------*/
+export const uniqueLinks = arrayObject => {
   let newArray = arrayObject.map(element => element.href)
-  const uniqueArray = [...new Set(newArray)];
+  const uniqueArray = [...new Set(newArray)]
   //console.log('uniqueArray', uniqueArray);
   return uniqueArray.length
 }
 
-export const brokenLinks = (arrayObject) => {
+/*---------------------------Option: --stats --validate---------------------------*/
+export const brokenLinks = arrayObject => {
   let brokenArray = arrayObject.filter(element => element.status >= 400)
   return brokenArray.length
 }
 
 /*---------------------------Testing------------------------------------*/
 
-//mdLinks('text.md', {validate:true}).then(result => console.log(result))
+//mdLinks('prueba.md', {validate:true}).catch(console.error('error'))
+//mdLinks('prueba.md', {validate:true}).then(result => console.log(result))
 
-//const arrayPrueba = [{href:'https://nodejs.org/api/path.html'}, {href:'https://nodejs.org/api/path.html'},{href:'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e'}]
+//const arrayPrueba = [{href:'https://nodejs.dev'}, {href:'https://nodejs.dev123/'},{href:'https://nodejs.org/en/1'}]
 //console.log('uniqueLinks', uniqueLinks(arrayPrueba));
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
 //mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
 //console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'));
-
