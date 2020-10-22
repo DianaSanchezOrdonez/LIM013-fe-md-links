@@ -36,9 +36,11 @@ el entorno de desarrollo de Javascript.
 
 ### Diagrama de Flujo
 
-![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/done.png)
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/diagramaFlujoMDLINKS.png)
 
 ### Actividades cumplidas 
+
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/done.png)
 
 ### Especificaciones técnicas
 
@@ -103,6 +105,16 @@ También podemos combinar `--stats` y `--validate` para obtener estadísticas qu
 necesiten de los resultados de la validación.
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/mix.png)
+
+#### Mensajes de errores
+
+Cuando la ruta ingresada no existe 
+
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/noExiste.png)
+
+Cuando no existen archivos `Markdown` en la ruta ingresada
+
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/noMd.png)
 
 ## 4. Desplegado en NPM
 [dianaiso-md-links](https://www.npmjs.com/package/dianaiso-md-links)
