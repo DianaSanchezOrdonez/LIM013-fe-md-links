@@ -73,6 +73,17 @@ La librería se instala con el siguiente comando desde el terminal:
 Y de forma global con 
   `npm install --global dianaiso-md-links`
 
+Para desplegar nuestro `package.json`
+Con el siguiente comando `npm init -y`
+
+En el `package.json` agregar "type": "module" para hacer uso del import y export en nuestro proyecto
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/step03.png)
+
+Una vez instalada la librería, vamos a importarla
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/step04.png)
+
+Y listo !
+
 ### Guía de Uso
 
 La librería se ejecuta desde la terminal: `md-links <path-to-file> [options]`
