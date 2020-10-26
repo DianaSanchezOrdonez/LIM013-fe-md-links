@@ -24,7 +24,7 @@ const getLinks = route => {
   }
 }
 
-/*------------Lee cada archivo .md y extrae el href,text,file---------------------*/
+/*------------Read each file .md and pull the href,text,file---------------------*/
 const extraerLinks = filesMd => {
   const arrayLinksMd = []
   filesMd.forEach(file => {
@@ -57,7 +57,7 @@ export const mdLinksValidate = arrayLinks => {
           status: res.status,
         }
         if (res.status >= 200 && res.status <= 399) objLinks.textStatus = 'OK'
-        else objLinks.textStatus = 'Fail'
+        else objLinks.textStatus = res.statusText
         return objLinks
       })
       .catch(() => {
@@ -109,8 +109,9 @@ export const uniqueLinks = arrayObject => {
 
 /*---------------------------Option: --stats --validate---------------------------*/
 export const brokenLinks = arrayObject => {
-  let brokenArray = arrayObject.filter(element => element.status >= 400)
-  return brokenArray.length
+  let brokenArray = arrayObject.filter(element => element.status >= 400 || element.status == 'Error')
+  brokenArray = brokenArray.map( element => element.href)
+  return brokenArray
 }
 
 /*---------------------------Testing------------------------------------*/
@@ -119,7 +120,8 @@ export const brokenLinks = arrayObject => {
 //mdLinks('prueba.md', {validate:true}).then(result => console.log(result))
 //console.log(mdLinks('text.txt', { validate: true }).then(result => console.log(result)).catch(error => console.error(error.message)))
 //const arrayPrueba = [{href:'https://nodejs.dev', file:'text.md', text:'Documentacion de Node.js'}, {href:'https://nodejs.dev123/', file:'text.md', text:'Documentacion de Node.js'},{href:'https://nodejs.org/en/1', file:'text.md', text:'Documentacion de Node.js'}]
-//console.log('uniqueLinks', uniqueLinks(arrayPrueba));
+//mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
+//console.log('brokenLinks', brokenLinks(broken));
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
 //mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
 //console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'))

@@ -56,7 +56,7 @@ test('Promise when validate: true', () => {
         'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
       text: 'Configuración de npm-scripts',
       status: 403,
-      textStatus: 'Fail',
+      textStatus: 'Forbidden',
     },
     {
       href: 'https://docs.npmjs.com/misc/scripts',
@@ -72,7 +72,7 @@ test('Promise when validate: true', () => {
         'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
       text: 'Uso de sistema de archivos',
       status: 404,
-      textStatus: 'Fail',
+      textStatus: 'Not Found',
     },
     {
       href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',
@@ -187,7 +187,7 @@ describe('Broken Links', () => {
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
         status: 403,
-        textStatus: 'Fail',
+        textStatus: 'Forbidden',
       },
       {
         href: 'https://docs.npmjs.com/misc/scripts',
@@ -197,7 +197,7 @@ describe('Broken Links', () => {
       {
         href: 'https://nodejs.org/api/fs.html123',
         status: 404,
-        textStatus: 'Fail',
+        textStatus: 'Not Found',
       },
       {
         href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',
@@ -210,25 +210,26 @@ describe('Broken Links', () => {
         textStatus: 'OK',
       },
     ]
+    const result = ['https://docs.npmjs.com/misc/scripts123', 'https://nodejs.org/api/fs.html123',]
 
-    expect(brokenLinks(arrayObject)).toEqual(2)
+    expect(brokenLinks(arrayObject)).toEqual(result)
   })
   it('Broken Links => 3', () => {
     const arrayObject = [
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
         status: 403,
-        textStatus: 'Fail',
+        textStatus: 'Forbidden',
       },
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
         status: 404,
-        textStatus: 'OK',
+        textStatus: 'Not Found',
       },
       {
         href: 'https://nodejs.org/api/fs.html123',
         status: 404,
-        textStatus: 'Fail',
+        textStatus: 'Not Found',
       },
       {
         href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',
@@ -236,7 +237,8 @@ describe('Broken Links', () => {
         textStatus: 'OK',
       },
     ]
+    const result = ['https://docs.npmjs.com/misc/scripts123', 'https://docs.npmjs.com/misc/scripts123', 'https://nodejs.org/api/fs.html123']
 
-    expect(brokenLinks(arrayObject)).toEqual(3)
+    expect(brokenLinks(arrayObject)).toEqual(result)
   })
 })

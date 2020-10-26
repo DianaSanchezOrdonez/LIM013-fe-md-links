@@ -132,8 +132,9 @@ if (opt === undefined) {
   })
     .then(result => {
       if (result.length > 0) {
+        
         return console.log(
-          `Total => ${result.length} \nUnique => ${uniqueLinks(result)} \nBroken => ${brokenLinks(result)}`
+          `Total => ${result.length} \nUnique => ${uniqueLinks(result)} \nBroken => ${brokenLinks(result).length} \nSon los siguientes:`, brokenLinks(result)
         )
       }
 

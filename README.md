@@ -90,7 +90,8 @@ En caso de que el usuario solo introduce en la terminal
 
 Si pasamos la opción `--validate`, el módulo debe hacer una petición HTTP para
 averiguar si el link funciona o no. Si el link resulta en una redirección a una
-URL que responde ok, entonces consideraremos el link como ok.
+URL que responde ok, entonces consideraremos el link como ok; en caso contrario se indica el tipo de error 
+que pueda tener la petición.
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/validate.png)
 
@@ -102,7 +103,7 @@ básicas sobre los links.
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/stats.png)
 
 También podemos combinar `--stats` y `--validate` para obtener estadísticas que
-necesiten de los resultados de la validación.
+necesiten de los resultados de la validación, incluyendo el listado de links rotos.
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/mix.png)
 
