@@ -34,6 +34,12 @@ describe('Testing Promise', () => {
           'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
         text: 'Crear módulos en Node.js',
       },
+      {
+        href: 'https://nodejs.dev123/',
+        file:
+          'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
+        text: 'Documentación de Node.js',
+      },
     ]
     return mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/test', {
       validate: false,
@@ -50,7 +56,7 @@ test('Promise when validate: true', () => {
         'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
       text: 'Configuración de npm-scripts',
       status: 403,
-      textStatus: 'Forbidden',
+      textStatus: 'Fail',
     },
     {
       href: 'https://docs.npmjs.com/misc/scripts',
@@ -66,7 +72,7 @@ test('Promise when validate: true', () => {
         'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
       text: 'Uso de sistema de archivos',
       status: 404,
-      textStatus: 'Not Found',
+      textStatus: 'Fail',
     },
     {
       href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',
@@ -84,11 +90,33 @@ test('Promise when validate: true', () => {
       status: 200,
       textStatus: 'OK',
     },
+    {
+      href: 'https://nodejs.dev123/',
+      file:
+        'C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test.md,C:\\DIANA\\laboratoria\\LIM013-fe-md-links\\test\\test2.md',
+      text: 'Documentación de Node.js',
+      status: 'Error',
+      textStatus: 'Fail',
+    },
   ]
   return mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/test', {
     validate: true,
   }).then(data => {
     expect(data).toEqual(result)
+  })
+})
+test('Promise when no extension md', () => {
+  return mdLinks('text.txt', {
+    validate: true,
+  }).then(data => {
+    expect(data).toEqual([])
+  })
+})
+test('Promise when fail', () => {
+  return mdLinks('diana.txt', {
+    validate: true,
+  }).catch(error => {
+    expect(error).toEqual(new Error('No existe'))
   })
 })
 
@@ -159,7 +187,7 @@ describe('Broken Links', () => {
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
         status: 403,
-        textStatus: 'Forbidden',
+        textStatus: 'Fail',
       },
       {
         href: 'https://docs.npmjs.com/misc/scripts',
@@ -169,7 +197,7 @@ describe('Broken Links', () => {
       {
         href: 'https://nodejs.org/api/fs.html123',
         status: 404,
-        textStatus: 'Not Found',
+        textStatus: 'Fail',
       },
       {
         href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',
@@ -190,7 +218,7 @@ describe('Broken Links', () => {
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
         status: 403,
-        textStatus: 'Forbidden',
+        textStatus: 'Fail',
       },
       {
         href: 'https://docs.npmjs.com/misc/scripts123',
@@ -200,7 +228,7 @@ describe('Broken Links', () => {
       {
         href: 'https://nodejs.org/api/fs.html123',
         status: 404,
-        textStatus: 'Not Found',
+        textStatus: 'Fail',
       },
       {
         href: 'https://docs.npmjs.com/getting-started/publishing-npm-packages',

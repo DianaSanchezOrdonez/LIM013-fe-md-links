@@ -6,8 +6,7 @@ const expToLinks = /\[((.+?))\]\((http|https|ftp|ftps).+?\)/g
 const expToUrl = /\((http|https|ftp|ftps).+?\)/g
 const textToUrl = /\[((.+?))\]/g
 
-/*---------------------------Second Step------------------------------------*/
-
+/*----------------------Array de archivos con .md------------------------------*/
 const getLinks = route => {
   if (isExistPath(route)) {
     if (isAbsolutePath(route)) {
@@ -25,6 +24,7 @@ const getLinks = route => {
   }
 }
 
+/*------------Lee cada archivo .md y extrae el href,text,file---------------------*/
 const extraerLinks = filesMd => {
   const arrayLinksMd = []
   filesMd.forEach(file => {
@@ -45,7 +45,7 @@ const extraerLinks = filesMd => {
   return arrayLinksMd
 }
 
-/*---------------------------Option: --validate------------------------------------*/
+/*---------------------------Option: --validate-------------------------------*/
 export const mdLinksValidate = arrayLinks => {
   const linksValidate = arrayLinks.map(element => {
     return fetch(element.href)
@@ -56,7 +56,7 @@ export const mdLinksValidate = arrayLinks => {
           text: element.text,
           status: res.status,
         }
-        if (res.status >= 200 && res.status <= 399) objLinks.textStatus = 'Ok'
+        if (res.status >= 200 && res.status <= 399) objLinks.textStatus = 'OK'
         else objLinks.textStatus = 'Fail'
         return objLinks
       })
@@ -98,17 +98,12 @@ export const mdLinks = (pathFile, option) =>
     } else {
       resolve(result)
     }
-
-    //console.log('result', result);
   })
-
-//mdLinks('text.txt', {validate:true}).catch( error => console.error(error.message))
 
 /*---------------------------Option: --stats------------------------------------*/
 export const uniqueLinks = arrayObject => {
   let newArray = arrayObject.map(element => element.href)
   const uniqueArray = [...new Set(newArray)]
-  //console.log('uniqueArray', uniqueArray);
   return uniqueArray.length
 }
 
@@ -122,9 +117,9 @@ export const brokenLinks = arrayObject => {
 
 //mdLinks('prueba.md', {validate:true}).catch(console.error('error'))
 //mdLinks('prueba.md', {validate:true}).then(result => console.log(result))
-
-//const arrayPrueba = [{href:'https://nodejs.dev'}, {href:'https://nodejs.dev123/'},{href:'https://nodejs.org/en/1'}]
+//console.log(mdLinks('text.txt', { validate: true }).then(result => console.log(result)).catch(error => console.error(error.message)))
+//const arrayPrueba = [{href:'https://nodejs.dev', file:'text.md', text:'Documentacion de Node.js'}, {href:'https://nodejs.dev123/', file:'text.md', text:'Documentacion de Node.js'},{href:'https://nodejs.org/en/1', file:'text.md', text:'Documentacion de Node.js'}]
 //console.log('uniqueLinks', uniqueLinks(arrayPrueba));
 //mdLinksValidate(arrayPrueba).then((result) => {console.log('result',result)})
 //mdLinks('C:/DIANA/laboratoria/LIM013-fe-md-links/prueba.md', { validate: true })
-//console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'));
+//console.log(getLinks('C:/DIANA/laboratoria/LIM013-fe-md-links'))

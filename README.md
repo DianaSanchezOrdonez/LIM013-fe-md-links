@@ -116,5 +116,8 @@ Cuando no existen archivos `Markdown` en la ruta ingresada
 
 ![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/noMd.png)
 
+#### Testing 
+![Error al cargar la imagen](https://raw.githubusercontent.com/DianaSanchezOrdonez/LIM013-fe-md-links/master/src/img/test.png)
+
 ## 4. Desplegado en NPM
 [dianaiso-md-links](https://www.npmjs.com/package/dianaiso-md-links)
