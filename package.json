@@ -1,6 +1,6 @@
 {
   "name": "dianaiso-md-links",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Este módulo reporta estadísticas de links, si son válidos, únicos o están rotos que se encuentran en archivos Markdown",
   "main": "src/index.js",
   "type": "module",
